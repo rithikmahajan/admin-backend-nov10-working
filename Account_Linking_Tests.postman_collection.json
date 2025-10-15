@@ -1,0 +1,433 @@
+{
+  "info": {
+    "name": "Account Linking Test Collection",
+    "_postman_id": "account-linking-test",
+    "description": "Test collection for multiple authentication methods and account linking",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "firebase_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication Tests",
+      "item": [
+        {
+          "name": "Sign In with Apple (New User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('jwt_token', response.data.token);",
+                  "    pm.test('User created successfully', function() {",
+                  "        pm.expect(response.success).to.be.true;",
+                  "        pm.expect(response.data.user.authProvider).to.eql('apple');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/apple-signin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "apple-signin"]
+            },
+            "description": "Test Apple Sign In for a new user. Should create account and return JWT."
+          }
+        },
+        {
+          "name": "Sign In with Google (Existing Email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Conflict detected', function() {",
+                  "    pm.expect(pm.response.code).to.eql(409);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.status).to.eql('account_exists');",
+                  "    pm.expect(response.data.existing_methods).to.include('apple');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login/firebase",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login", "firebase"]
+            },
+            "description": "Test Google Sign In with email that already has Apple account. Should return 409 Conflict."
+          }
+        },
+        {
+          "name": "Email/Password Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('jwt_token', response.data.token);",
+                  "    pm.test('Login successful', function() {",
+                  "        pm.expect(response.success).to.be.true;",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phNo\": \"7006114695\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Traditional email/password login to get JWT token for testing protected endpoints."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Account Linking Tests",
+      "item": [
+        {
+          "name": "Link Apple Account (Success)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Account linked successfully', function() {",
+                  "    pm.expect(pm.response.code).to.eql(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.true;",
+                  "    pm.expect(response.data.user.authProvider).to.eql('apple');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "JWT token from login"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/link-provider",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "link-provider"]
+            },
+            "description": "Link Apple account to existing user. Requires authentication."
+          }
+        },
+        {
+          "name": "Link Apple Account (Already Linked)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Duplicate linking prevented', function() {",
+                  "    pm.expect(pm.response.code).to.eql(409);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/link-provider",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "link-provider"]
+            },
+            "description": "Try to link the same provider again. Should return 409 Conflict."
+          }
+        },
+        {
+          "name": "Link Without Authentication",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Unauthorized access blocked', function() {",
+                  "    pm.expect(pm.response.code).to.eql(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/link-provider",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "link-provider"]
+            },
+            "description": "Try to link provider without JWT token. Should return 401 Unauthorized."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Get Linked Providers",
+      "item": [
+        {
+          "name": "Get All Linked Providers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Providers retrieved successfully', function() {",
+                  "    pm.expect(pm.response.code).to.eql(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.true;",
+                  "    pm.expect(response.data.linkedProviders).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/linked-providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "linked-providers"]
+            },
+            "description": "Get all authentication methods linked to the current user."
+          }
+        },
+        {
+          "name": "Get Providers Without Auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Unauthorized access blocked', function() {",
+                  "    pm.expect(pm.response.code).to.eql(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/linked-providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "linked-providers"]
+            },
+            "description": "Try to get linked providers without authentication. Should return 401."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Edge Cases",
+      "item": [
+        {
+          "name": "Invalid Firebase Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Invalid token rejected', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"invalid-token-12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/apple-signin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "apple-signin"]
+            },
+            "description": "Test with invalid Firebase token. Should return 400/401 error."
+          }
+        },
+        {
+          "name": "Missing idToken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Missing token rejected', function() {",
+                  "    pm.expect(pm.response.code).to.eql(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/link-provider",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "link-provider"]
+            },
+            "description": "Test without idToken in body. Should return 400 Bad Request."
+          }
+        },
+        {
+          "name": "Expired JWT Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Expired token rejected', function() {",
+                  "    pm.expect(pm.response.code).to.eql(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer expired-jwt-token-here"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/linked-providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "linked-providers"]
+            },
+            "description": "Test with expired JWT token. Should return 401 Unauthorized."
+          }
+        }
+      ]
+    }
+  ]
+}

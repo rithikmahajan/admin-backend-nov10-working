@@ -1,0 +1,54 @@
+# Deployment ignore file - excludes these from backend deployment
+
+# Admin panel frontend (exclude from backend deployment)
+final/
+
+# Development files
+node_modules/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Development and test files
+.nyc_output
+coverage/
+.coverage
+.cache
+.parcel-cache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Git files (will be handled separately)
+.git/
+.gitignore
+
+# Postman collections (optional - remove if you want these on server)
+*.postman_collection.json
+
+# SSH keys
+*.pub
+*_ssh_key*
+
+# Local development files
+ritik_ssh_key.pub

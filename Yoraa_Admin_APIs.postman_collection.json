@@ -1,0 +1,1276 @@
+{
+  "info": {
+    "_postman_id": "yoraa-admin-apis",
+    "name": "Yoraa Admin APIs",
+    "description": "Admin APIs for Yoraa Clothing Shop - Requires admin authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{adminToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "subCategoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "partnerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bannerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "promoCodeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "notificationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "shippingChargeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "firebaseUid",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Admin Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@yoraa.com\",\n  \"password\": \"adminpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "admin", "login"]
+            },
+            "description": "Login as admin to get authentication token"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('adminToken', response.data.token);",
+                  "        console.log('Admin token saved:', response.data.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👥 User Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/getAlluser",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "getAlluser"]
+            },
+            "description": "Get all registered users"
+          }
+        },
+        {
+          "name": "Get Total Users Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/total-users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "total-users"]
+            },
+            "description": "Get total count of users"
+          }
+        },
+        {
+          "name": "Make User Admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/make-admin/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "make-admin", "{{userId}}"]
+            },
+            "description": "Grant admin privileges to user"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/delete-user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "delete-user", "{{userId}}"]
+            },
+            "description": "Delete user account"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Items Management",
+      "item": [
+        {
+          "name": "Create Item",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Test Item",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Test item description",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "999",
+                  "type": "text"
+                },
+                {
+                  "key": "stock",
+                  "value": "50",
+                  "type": "text"
+                },
+                {
+                  "key": "subCategoryId",
+                  "value": "{{subCategoryId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items"]
+            },
+            "description": "Create new item"
+          }
+        },
+        {
+          "name": "Update Item",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Item Name",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "1299",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}"]
+            },
+            "description": "Update existing item"
+          }
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}"]
+            },
+            "description": "Delete item"
+          }
+        },
+        {
+          "name": "Upload Item Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}", "upload-image"]
+            },
+            "description": "Upload image for item"
+          }
+        },
+        {
+          "name": "Get Products by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/status/draft",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "status", "draft"]
+            },
+            "description": "Get items by status (draft/published)"
+          }
+        },
+        {
+          "name": "Create Basic Product (Phase 1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"Basic Product\",\n  \"categoryId\": \"{{categoryId}}\",\n  \"subCategoryId\": \"{{subCategoryId}}\",\n  \"status\": \"draft\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/phase1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "phase1"]
+            },
+            "description": "Create basic product configuration"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📂 Categories Management",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Category\",\n  \"description\": \"Category description\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            },
+            "description": "Create new category"
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Update existing category"
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Delete category"
+          }
+        },
+        {
+          "name": "Create SubCategory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New SubCategory\",\n  \"categoryId\": \"{{categoryId}}\",\n  \"description\": \"SubCategory description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories"]
+            },
+            "description": "Create new subcategory"
+          }
+        },
+        {
+          "name": "Update SubCategory",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated SubCategory\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories", "{{subCategoryId}}"]
+            },
+            "description": "Update existing subcategory"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛍️ Orders Management",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "orders"]
+            },
+            "description": "Get all orders for admin"
+          }
+        },
+        {
+          "name": "Get Order Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "orders", "statistics"]
+            },
+            "description": "Get order statistics"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shipped\",\n  \"trackingNumber\": \"TRACK123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/{{orderId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "orders", "{{orderId}}", "status"]
+            },
+            "description": "Update order status"
+          }
+        },
+        {
+          "name": "Accept Order",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/orders/{{orderId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "orders", "{{orderId}}", "accept"]
+            },
+            "description": "Accept order"
+          }
+        },
+        {
+          "name": "Get Return Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/returns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "returns"]
+            },
+            "description": "Get all return requests"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Promo Codes Management",
+      "item": [
+        {
+          "name": "Get All Promo Codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/promoCode/admin/promo-codes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "promoCode", "admin", "promo-codes"]
+            },
+            "description": "Get all promo codes"
+          }
+        },
+        {
+          "name": "Create Promo Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SAVE20\",\n  \"discountType\": \"percentage\",\n  \"discountValue\": 20,\n  \"minOrderValue\": 500,\n  \"maxDiscountAmount\": 200,\n  \"validFrom\": \"2024-01-01\",\n  \"validUntil\": \"2024-12-31\",\n  \"usageLimit\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/promoCode/admin/promo-codes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "promoCode", "admin", "promo-codes"]
+            },
+            "description": "Create new promo code"
+          }
+        },
+        {
+          "name": "Update Promo Code",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discountValue\": 25,\n  \"usageLimit\": 150\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/promoCode/admin/promo-codes/{{promoCodeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "promoCode", "admin", "promo-codes", "{{promoCodeId}}"]
+            },
+            "description": "Update existing promo code"
+          }
+        },
+        {
+          "name": "Delete Promo Code",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/promoCode/admin/promo-codes/{{promoCodeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "promoCode", "admin", "promo-codes", "{{promoCodeId}}"]
+            },
+            "description": "Delete promo code"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🤝 Partners Management",
+      "item": [
+        {
+          "name": "Create Partner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Partner Company\",\n  \"email\": \"partner@company.com\",\n  \"phone\": \"+919876543210\",\n  \"type\": \"vendor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/partners",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "partners"]
+            },
+            "description": "Create new partner"
+          }
+        },
+        {
+          "name": "Get All Partners",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/partners",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "partners"]
+            },
+            "description": "Get all partners"
+          }
+        },
+        {
+          "name": "Update Partner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Partner Name\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/partners/{{partnerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "partners", "{{partnerId}}"]
+            },
+            "description": "Update partner information"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎨 Banners Management",
+      "item": [
+        {
+          "name": "Create Banner",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "New Banner",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Banner description",
+                  "type": "text"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/banners",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "banners"]
+            },
+            "description": "Create new banner"
+          }
+        },
+        {
+          "name": "Update Banner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Banner Title\",\n  \"isActive\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/banners/{{bannerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "banners", "{{bannerId}}"]
+            },
+            "description": "Update banner"
+          }
+        },
+        {
+          "name": "Delete Banner",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/banners/{{bannerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "banners", "{{bannerId}}"]
+            },
+            "description": "Delete banner"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Analytics & Reports",
+      "item": [
+        {
+          "name": "Get Dashboard Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "dashboard"]
+            },
+            "description": "Get dashboard analytics data"
+          }
+        },
+        {
+          "name": "Get Sales Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/sales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "sales"]
+            },
+            "description": "Get sales analytics"
+          }
+        },
+        {
+          "name": "Get User Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "users"]
+            },
+            "description": "Get user analytics"
+          }
+        },
+        {
+          "name": "Get Acquisition Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/acquisition",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "acquisition"]
+            },
+            "description": "Get acquisition analytics"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎯 Points System Management",
+      "item": [
+        {
+          "name": "Get Points Configuration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/points/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "config"]
+            },
+            "description": "Get points system configuration"
+          }
+        },
+        {
+          "name": "Update Points Configuration",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signupPoints\": 100,\n  \"orderPoints\": 10,\n  \"reviewPoints\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/points/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "config"]
+            },
+            "description": "Update points configuration"
+          }
+        },
+        {
+          "name": "Get All Users with Points",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/points/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "users"]
+            },
+            "description": "Get all users with points data"
+          }
+        },
+        {
+          "name": "Allocate Points",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"points\": 50,\n  \"reason\": \"Bonus points\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/points/allocate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "allocate"]
+            },
+            "description": "Allocate points to user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Bulk Operations",
+      "item": [
+        {
+          "name": "Bulk Upload Items",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bulk-upload/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bulk-upload", "items"]
+            },
+            "description": "Bulk upload items via CSV/Excel"
+          }
+        },
+        {
+          "name": "Bulk Upload Categories",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bulk-upload/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bulk-upload", "categories"]
+            },
+            "description": "Bulk upload categories"
+          }
+        },
+        {
+          "name": "Download Items Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/download-template",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "download-template"]
+            },
+            "description": "Download items upload template"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔥 Firebase Management",
+      "item": [
+        {
+          "name": "Get All Firebase Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/firebase/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "firebase", "users"]
+            },
+            "description": "Get all Firebase users"
+          }
+        },
+        {
+          "name": "Create Firebase User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"displayName\": \"New User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/firebase/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "firebase", "users"]
+            },
+            "description": "Create Firebase user"
+          }
+        },
+        {
+          "name": "Update Firebase User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"updated@example.com\",\n  \"displayName\": \"Updated Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/firebase/users/{{firebaseUid}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "firebase", "users", "{{firebaseUid}}"]
+            },
+            "description": "Update Firebase user"
+          }
+        },
+        {
+          "name": "Set Custom Claims",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claims\": {\n    \"admin\": true,\n    \"role\": \"administrator\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/firebase/users/{{firebaseUid}}/claims",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "firebase", "users", "{{firebaseUid}}", "claims"]
+            },
+            "description": "Set custom claims for Firebase user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📧 Notifications Management",
+      "item": [
+        {
+          "name": "Send Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Notification\",\n  \"message\": \"This is a test notification\",\n  \"type\": \"general\",\n  \"targetUsers\": \"all\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/send",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "send"]
+            },
+            "description": "Send notification to users"
+          }
+        },
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"]
+            },
+            "description": "Get all notifications"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🚚 Shipping Management",
+      "item": [
+        {
+          "name": "Get Shipping Charges",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shipping"]
+            },
+            "description": "Get all shipping charges"
+          }
+        },
+        {
+          "name": "Create Shipping Charge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"Mumbai\",\n  \"charge\": 50,\n  \"freeShippingThreshold\": 999\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shipping"]
+            },
+            "description": "Create new shipping charge rule"
+          }
+        },
+        {
+          "name": "Update Shipping Charge",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"charge\": 75,\n  \"freeShippingThreshold\": 1200\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/{{shippingChargeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shipping", "{{shippingChargeId}}"]
+            },
+            "description": "Update shipping charge"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Invite System Management",
+      "item": [
+        {
+          "name": "Generate Invite Codes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/admin/generate-code",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "admin", "generate-code"]
+            },
+            "description": "Generate new invite codes"
+          }
+        },
+        {
+          "name": "Export Invite Codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/admin/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "admin", "export"]
+            },
+            "description": "Export invite codes data"
+          }
+        },
+        {
+          "name": "Get Invite Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "admin", "stats"]
+            },
+            "description": "Get invite system statistics"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📈 Cart Abandonment Management",
+      "item": [
+        {
+          "name": "Get Abandoned Carts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart-abandonment/abandoned-carts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart-abandonment", "abandoned-carts"]
+            },
+            "description": "Get abandoned cart data"
+          }
+        },
+        {
+          "name": "Sync Firebase Users",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart-abandonment/sync-firebase-users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart-abandonment", "sync-firebase-users"]
+            },
+            "description": "Sync Firebase users for abandonment tracking"
+          }
+        },
+        {
+          "name": "Export Abandonment Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart-abandonment/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart-abandonment", "export"]
+            },
+            "description": "Export cart abandonment data"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Ensure admin token is set for authenticated requests",
+          "const adminToken = pm.collectionVariables.get('adminToken');",
+          "if (adminToken && pm.request.auth.type !== 'noauth') {",
+          "    pm.request.headers.upsert({",
+          "        key: 'Authorization',",
+          "        value: 'Bearer ' + adminToken",
+          "    });",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-save IDs for subsequent requests",
+          "if (pm.response.code === 200 || pm.response.code === 201) {",
+          "    try {",
+          "        const jsonData = pm.response.json();",
+          "        ",
+          "        if (jsonData.data && jsonData.data._id) {",
+          "            const url = pm.request.url.toString();",
+          "            if (url.includes('/items')) {",
+          "                pm.collectionVariables.set('itemId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/categories')) {",
+          "                pm.collectionVariables.set('categoryId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/subcategories')) {",
+          "                pm.collectionVariables.set('subCategoryId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/orders')) {",
+          "                pm.collectionVariables.set('orderId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/partners')) {",
+          "                pm.collectionVariables.set('partnerId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/banners')) {",
+          "                pm.collectionVariables.set('bannerId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/promo')) {",
+          "                pm.collectionVariables.set('promoCodeId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/shipping')) {",
+          "                pm.collectionVariables.set('shippingChargeId', jsonData.data._id);",
+          "            }",
+          "        }",
+          "    } catch (e) {",
+          "        // Ignore JSON parsing errors",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}

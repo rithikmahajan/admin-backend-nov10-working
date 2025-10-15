@@ -1,0 +1,159 @@
+/* Montserrat Font Family - Variable and Static Weights */
+
+/* Base Montserrat font utilities */
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.font-montserrat-variable {
+  font-family: 'Montserrat Variable', 'Montserrat', sans-serif;
+}
+
+/* Montserrat weight utilities */
+.font-montserrat-thin {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+}
+
+.font-montserrat-extralight {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+}
+
+.font-montserrat-light {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+
+.font-montserrat-regular {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+.font-montserrat-medium {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.font-montserrat-semibold {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.font-montserrat-bold {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.font-montserrat-extrabold {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+}
+
+.font-montserrat-black {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+}
+
+/* Italic variants */
+.font-montserrat-thin-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.font-montserrat-extralight-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.font-montserrat-light-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.font-montserrat-regular-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.font-montserrat-medium-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.font-montserrat-semibold-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.font-montserrat-bold-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.font-montserrat-extrabold-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.font-montserrat-black-italic {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* Custom variable font utilities for smoother weight transitions */
+.font-montserrat-variable-weight {
+  font-family: 'Montserrat Variable', 'Montserrat', sans-serif;
+  font-variation-settings: 'wght' var(--font-weight, 400);
+}
+
+/* CSS Custom Properties for dynamic font weights */
+:root {
+  --montserrat-thin: 100;
+  --montserrat-extralight: 200;
+  --montserrat-light: 300;
+  --montserrat-regular: 400;
+  --montserrat-medium: 500;
+  --montserrat-semibold: 600;
+  --montserrat-bold: 700;
+  --montserrat-extrabold: 800;
+  --montserrat-black: 900;
+}
+
+/* Utility classes for common Figma font styles */
+.figma-button-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.figma-heading-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.figma-body-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.figma-caption-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}

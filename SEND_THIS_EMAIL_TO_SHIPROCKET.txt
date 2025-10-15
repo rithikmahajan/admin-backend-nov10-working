@@ -1,0 +1,55 @@
+Subject: URGENT: Enable API Integration IP Whitelist - Company ID 5783639
+
+Dear Shiprocket Support Team,
+
+I am facing API access issues and need immediate assistance.
+
+ISSUE:
+All API endpoints return: "Unauthorized! You do not have the required permissions[IP]."
+
+ACCOUNT DETAILS:
+- Main Account Email: contact@yoraa.in
+- Company ID: 5783639
+- Company Name: YORAA APPARELS PRIVATE LIMITED
+
+WHAT I'VE TRIED:
+1. Added IP to "API Users" section (for dashboard user support@yoraa.in)
+2. IPs added: 127.0.0.1, 0.0.0.0, 122.161.240.166, 165.193.19.244
+3. Still getting 403 "Unauthorized [IP]" errors on ALL API endpoints
+
+WHAT I NEED:
+I cannot find the "API Integration" or "API Settings" IP whitelist section in my dashboard.
+I only see "Additional Settings → API Users" which is for dashboard access, not API calls.
+
+REQUEST:
+Please either:
+1. Enable and configure API Integration IP whitelist for my account
+2. Guide me to the correct section in dashboard
+3. Whitelist these IPs directly for API access:
+   - Production IP: 165.193.19.244
+   - Development IP: 122.161.240.166
+
+URGENCY:
+This is blocking our production order fulfillment system. Every customer order is failing to create shipment.
+
+TEST ENDPOINTS FAILING:
+- POST /v1/external/orders/create/adhoc
+- GET /v1/external/orders
+- GET /v1/external/courier/courierListWithCounts
+- All other endpoints
+
+AUTHENTICATION STATUS:
+✅ Authentication works (token received successfully)
+✅ Using main account credentials (contact@yoraa.in)
+❌ All subsequent API calls blocked with [IP] error
+
+Please assist urgently or call me to resolve this.
+
+Contact:
+- Name: Rithik Mahajan
+- Email: contact@yoraa.in
+- Phone: +91 7006114695
+
+Best regards,
+Rithik Mahajan
+YORAA APPARELS PRIVATE LIMITED

@@ -1,0 +1,109 @@
+/* Import Google Fonts - Enhanced with full Montserrat family */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Import Custom Font Utilities */
+@import './styles/fonts.css';
+
+/* Import Design System Variables */
+@import './constants/designSystem.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Print Styles - Hide navigation and show only content */
+@media print {
+  /* Hide navigation, sidebar, and other UI elements during print */
+  .print-hide {
+    display: none !important;
+  }
+  
+  /* Show only printable content */
+  .print-content {
+    display: block !important;
+  }
+  
+  /* Remove backgrounds and shadows for better print quality */
+  .print-clean {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+  
+  /* Optimize table printing */
+  .print-table {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* Header styling for print */
+  .print-header {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid #333;
+  }
+  
+  /* General print optimizations */
+  body {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #000;
+    background: white;
+  }
+  
+  /* Hide all buttons except print-specific ones */
+  button:not(.print-keep) {
+    display: none !important;
+  }
+  
+  /* Remove margins for full page usage */
+  .print-full-width {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Hide navigation, sidebar, and other non-essential elements */
+  nav, .sidebar, .navbar, .menu, .navigation {
+    display: none !important;
+  }
+  
+  /* Optimize table layout for printing */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 10px 0 !important;
+  }
+  
+  th, td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    text-align: left !important;
+  }
+  
+  th {
+    background-color: #f5f5f5 !important;
+    font-weight: bold !important;
+  }
+  
+  /* Ensure content is visible and properly sized */
+  .print-content {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Page breaks */
+  .print-page-break {
+    page-break-before: always !important;
+  }
+  
+  .print-no-break {
+    page-break-inside: avoid !important;
+  }
+  
+  /* Typography optimizations */
+  h1, h2, h3, h4, h5, h6 {
+    color: #000 !important;
+    page-break-after: avoid !important;
+  }
+}

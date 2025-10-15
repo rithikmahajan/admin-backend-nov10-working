@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Authentication Token</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .token-container {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .clear-btn {
+            background: #dc3545;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 Set Authentication Token for Settings API</h1>
+    
+    <p>This page will set the required authentication token in your browser's localStorage so you can access the settings API.</p>
+    
+    <div class="token-container">
+        <h3>Admin Token Details:</h3>
+        <p><strong>User:</strong> Johyeeinteeety rtoe (Admin)</p>
+        <p><strong>Email:</strong> user@example.com</p>
+        <p><strong>Expires:</strong> 7 days from generation</p>
+        
+        <button onclick="setTokens()">🔑 Set Authentication Token</button>
+        <button onclick="clearTokens()" class="clear-btn">🗑️ Clear Tokens</button>
+        <button onclick="checkTokens()">📋 Check Current Tokens</button>
+    </div>
+    
+    <div id="status"></div>
+    
+    <h3>Manual Setup (if needed):</h3>
+    <p>If the button doesn't work, open browser console and run these commands:</p>
+    <pre id="manual-commands"></pre>
+    
+    <h3>Next Steps:</h3>
+    <ol>
+        <li>Click "Set Authentication Token" button above</li>
+        <li>Go to your settings page: <a href="http://localhost:3001/settings" target="_blank">http://localhost:3001/settings</a></li>
+        <li>The API should now work without 401 errors</li>
+    </ol>
+
+    <script>
+        // Fresh token generated on 2025-09-24
+        const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGNkNzFmM2YzMWViNWQ3MmE2YzhlMjUiLCJuYW1lIjoiSm9oeWVlaW50ZWVldHkgcnRvZSIsInBoTm8iOiI3MDM2NTY3ODkwIiwiaXNWZXJpZmllZCI6dHJ1ZSwiaXNQaG9uZVZlcmlmaWVkIjp0cnVlLCJpc0VtYWlsVmVyaWZpZWQiOnRydWUsImlzQWRtaW4iOnRydWUsImlzUHJvZmlsZSI6dHJ1ZSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwicGxhdGZvcm0iOm51bGwsImlhdCI6MTc1ODcwOTMyNCwiZXhwIjoxNzU5MzE0MTI0fQ.2qUzysPsPUZ1hKPwQNL2gzM8syi_2JRhqK5p00M8Y0A';
+        
+        const userData = {
+            "_id": "68cd71f3f31eb5d72a6c8e25",
+            "name": "Johyeeinteeety rtoe",
+            "phNo": "7036567890",
+            "isVerified": true,
+            "isPhoneVerified": true,
+            "isEmailVerified": true,
+            "isAdmin": true,
+            "isProfile": true,
+            "email": "user@example.com",
+            "platform": null
+        };
+
+        function setTokens() {
+            try {
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                showStatus('✅ Authentication tokens set successfully!', 'success');
+                console.log('✅ Tokens set in localStorage');
+                
+                // Also set backup token names for compatibility
+                localStorage.setItem('token', authToken);
+                
+            } catch (error) {
+                showStatus('❌ Error setting tokens: ' + error.message, 'error');
+                console.error('Error setting tokens:', error);
+            }
+        }
+
+        function clearTokens() {
+            try {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('token');
+                
+                showStatus('🗑️ All authentication tokens cleared', 'success');
+                console.log('🗑️ Tokens cleared from localStorage');
+                
+            } catch (error) {
+                showStatus('❌ Error clearing tokens: ' + error.message, 'error');
+                console.error('Error clearing tokens:', error);
+            }
+        }
+
+        function checkTokens() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData');
+            const backupToken = localStorage.getItem('token');
+            
+            let message = '<h4>Current Token Status:</h4>';
+            message += `<p><strong>authToken:</strong> ${authToken ? '✅ Set' : '❌ Not set'}</p>`;
+            message += `<p><strong>userData:</strong> ${userData ? '✅ Set' : '❌ Not set'}</p>`;
+            message += `<p><strong>token (backup):</strong> ${backupToken ? '✅ Set' : '❌ Not set'}</p>`;
+            
+            if (authToken) {
+                try {
+                    const payload = JSON.parse(atob(authToken.split('.')[1]));
+                    const expiry = new Date(payload.exp * 1000);
+                    message += `<p><strong>Token expires:</strong> ${expiry.toLocaleString()}</p>`;
+                } catch (e) {
+                    message += `<p><strong>Token expires:</strong> Unable to decode</p>`;
+                }
+            }
+            
+            showStatus(message, 'info');
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            statusDiv.innerHTML = `<div class="${className}">${message}</div>`;
+        }
+
+        // Show manual commands
+        document.getElementById('manual-commands').textContent = `localStorage.setItem('authToken', '${authToken}');
+localStorage.setItem('userData', '${JSON.stringify(userData)}');
+localStorage.setItem('token', '${authToken}');`;
+
+        // Auto-check tokens on page load
+        window.onload = function() {
+            checkTokens();
+        };
+    </script>
+</body>
+</html>

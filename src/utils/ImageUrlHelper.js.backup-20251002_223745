@@ -1,0 +1,146 @@
+const { generateSignedUrl, getPublicUrl } = require('./S3');
+
+/**
+ * Generate fresh image URLs dynamically for API responses
+ * This replaces expired signed URLs with fresh ones
+ */
+
+// Extract S3 key from stored URL
+const extractS3KeyFromUrl = (imageUrl) => {
+  try {
+    if (!imageUrl) return null;
+    
+    // Handle signed URLs with query parameters
+    if (imageUrl.includes('X-Amz-Algorithm')) {
+      const urlParts = new URL(imageUrl);
+      let s3Key = urlParts.pathname.substring(1); // Remove leading slash
+      
+      // Remove bucket name from path if present
+      const bucketName = process.env.AWS_BUCKET_NAME;
+      if (s3Key.startsWith(`${bucketName}/`)) {
+        s3Key = s3Key.substring(bucketName.length + 1);
+      }
+      return s3Key;
+    }
+    
+    // Handle direct S3 URLs
+    if (imageUrl.includes(process.env.AWS_BUCKET_NAME)) {
+      const urlParts = new URL(imageUrl);
+      const pathParts = urlParts.pathname.split('/');
+      const bucketIndex = pathParts.indexOf(process.env.AWS_BUCKET_NAME);
+      if (bucketIndex !== -1) {
+        return pathParts.slice(bucketIndex + 1).join('/');
+      }
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error extracting S3 key from URL:', error);
+    return null;
+  }
+};
+
+// Generate fresh public URL for an image (no expiry)
+const generateFreshImageUrl = async (storedImageUrl) => {
+  try {
+    if (!storedImageUrl) return null;
+    
+    const s3Key = extractS3KeyFromUrl(storedImageUrl);
+    if (!s3Key) {
+      console.warn('Could not extract S3 key from URL:', storedImageUrl);
+      return storedImageUrl; // Return original if we can't extract key
+    }
+    
+    // Generate public URL (no expiry)
+    const publicUrl = getPublicUrl(s3Key);
+    console.log(`✅ Generated public URL for key: ${s3Key}`);
+    return publicUrl;
+  } catch (error) {
+    console.error('Error generating fresh image URL:', error);
+    // Return original URL as fallback
+    return storedImageUrl;
+  }
+};
+
+// Process multiple images and generate fresh URLs
+const generateFreshImageUrls = async (imageUrls) => {
+  if (!Array.isArray(imageUrls)) return [];
+  
+  const urlPromises = imageUrls.map(async (urlObj) => {
+    if (typeof urlObj === 'string') {
+      return await generateFreshImageUrl(urlObj);
+    } else if (urlObj && urlObj.url) {
+      return {
+        ...urlObj,
+        url: await generateFreshImageUrl(urlObj.url)
+      };
+    }
+    return urlObj;
+  });
+  
+  return await Promise.all(urlPromises);
+};
+
+// Transform category data with fresh image URLs
+const transformCategoryWithFreshUrls = async (category) => {
+  if (!category) return null;
+  
+  const categoryObj = category.toObject ? category.toObject() : category;
+  
+  if (categoryObj.imageUrl) {
+    categoryObj.imageUrl = await generateFreshImageUrl(categoryObj.imageUrl);
+  }
+  
+  return categoryObj;
+};
+
+// Transform subcategory data with fresh image URLs
+const transformSubCategoryWithFreshUrls = async (subcategory) => {
+  if (!subcategory) return null;
+  
+  const subcategoryObj = subcategory.toObject ? subcategory.toObject() : subcategory;
+  
+  if (subcategoryObj.imageUrl) {
+    subcategoryObj.imageUrl = await generateFreshImageUrl(subcategoryObj.imageUrl);
+  }
+  
+  return subcategoryObj;
+};
+
+// Transform item data with fresh image URLs
+const transformItemWithFreshUrls = async (item) => {
+  if (!item) return null;
+  
+  const itemObj = item.toObject ? item.toObject() : item;
+  
+  // Transform main item images
+  if (itemObj.images && Array.isArray(itemObj.images)) {
+    itemObj.images = await generateFreshImageUrls(itemObj.images);
+  }
+  
+  // Transform size chart image
+  if (itemObj.sizeChartImage && itemObj.sizeChartImage.url) {
+    itemObj.sizeChartImage.url = await generateFreshImageUrl(itemObj.sizeChartImage.url);
+  }
+  
+  // Transform populated category image
+  if (itemObj.categoryId && itemObj.categoryId.imageUrl) {
+    itemObj.categoryId.imageUrl = await generateFreshImageUrl(itemObj.categoryId.imageUrl);
+  }
+  
+  // Transform populated subcategory image
+  if (itemObj.subCategoryId && itemObj.subCategoryId.imageUrl) {
+    itemObj.subCategoryId.imageUrl = await generateFreshImageUrl(itemObj.subCategoryId.imageUrl);
+  }
+  
+  return itemObj;
+};
+
+module.exports = {
+  extractS3KeyFromUrl,
+  generateFreshImageUrl,
+  generateFreshImageUrls,
+  transformCategoryWithFreshUrls,
+  transformSubCategoryWithFreshUrls,
+  transformItemWithFreshUrls
+};

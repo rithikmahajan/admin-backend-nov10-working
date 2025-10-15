@@ -1,0 +1,60 @@
+Subject: API Permission Upgrade Required - Production Account
+
+Dear Shiprocket Team,
+
+I hope this email finds you well.
+
+I have successfully integrated the Shiprocket API into my production application, and authentication is working perfectly. However, I'm encountering 403 Forbidden errors on several critical endpoints that are essential for my business operations.
+
+**CURRENT SITUATION:**
+✅ Authentication: Working perfectly
+✅ Company/Pickup Info: Full access  
+✅ Account Login: Successful
+❌ Core APIs: Blocked with 403 Forbidden
+
+**BLOCKED ENDPOINTS:**
+• /account/details/wallet-balance
+• /courier/courierListWithCounts  
+• /courier/serviceability
+• /orders/create/adhoc
+• /orders (order management)
+
+**ACCOUNT DETAILS:**
+Company: YORA APPARELS PRIVATE LIMITED
+Email: contact@yoraa.in
+Account ID: 5783639
+User ID: 5996773
+Phone: +91-7006114695
+
+**ACCOUNT STATUS:**
+✅ Pickup Address: Verified and Active
+✅ Company Information: Complete
+✅ Authentication: Functional
+✅ Integration: Ready for production
+
+**REQUEST:**
+Please enable full API access for my verified production account. My e-commerce application is fully developed and ready for deployment, with the integration waiting only for API permission activation.
+
+This is for a live business requiring:
+- Real-time courier selection
+- Serviceability checking  
+- Order creation and management
+- Wallet balance monitoring
+
+**TECHNICAL CONFIRMATION:**
+I can confirm that my integration code is working correctly, as evidenced by successful authentication and pickup location retrieval. The 403 errors are clearly permission-based rather than technical issues.
+
+I would greatly appreciate your prompt assistance in enabling these API permissions so I can proceed with my production deployment.
+
+Please let me know if you need any additional documentation or verification from my end.
+
+Thank you for your time and support.
+
+Best regards,
+Rithik Mahajan
+Founder, Yoraa
+Phone: +91-7006114695
+Email: contact@yoraa.in
+
+---
+This email is regarding production API integration for business use. Please prioritize this request as it affects live business operations.

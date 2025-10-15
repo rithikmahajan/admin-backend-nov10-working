@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users can read and write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to read user profiles (for user management)
+    match /users/{userId} {
+      allow read: if request.auth != null;
+    }
+    
+    // Test collection for connection testing
+    match /test/{document} {
+      allow read: if true;
+    }
+    
+    // Categories - public read access
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Sub-categories - public read access
+    match /subCategories/{subCategoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Items - public read access
+    match /items/{itemId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Orders - users can read/write their own orders
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || request.auth.uid == request.resource.data.userId);
+    }
+    
+    // Cart - users can read/write their own cart
+    match /carts/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Wishlist - users can read/write their own wishlist
+    match /wishlist/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Reviews - authenticated users can read all, write their own
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // Admin collections - restricted access
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null && 
+        (request.auth.token.email == 'rithikmahajan27@gmail.com' || 
+         request.auth.token.phone_number == '+917006114695');
+    }
+    
+    // Default deny rule for any other documents
+    match /{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}

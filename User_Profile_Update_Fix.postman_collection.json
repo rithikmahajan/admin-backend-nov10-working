@@ -1,0 +1,262 @@
+{
+  "info": {
+    "name": "User Profile Update - React Native Fix",
+    "description": "Test collection for the new user profile update endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8001",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Login - Get Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save token and userId for subsequent requests",
+              "if (pm.response.code === 200) {",
+              "    const response = pm.response.json();",
+              "    pm.collectionVariables.set('token', response.token);",
+              "    pm.collectionVariables.set('userId', response.user._id);",
+              "    console.log('✅ Token saved:', response.token.substring(0, 20) + '...');",
+              "    console.log('✅ User ID saved:', response.user._id);",
+              "} else {",
+              "    console.log('❌ Login failed');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phNo\": \"1234567890\",\n  \"password\": \"test123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        },
+        "description": "Login to get authentication token. Update phNo and password with your test user credentials."
+      }
+    },
+    {
+      "name": "2. Get Current Profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "profile"]
+        },
+        "description": "Get the current user's profile details"
+      }
+    },
+    {
+      "name": "3. Update Profile (NEW Endpoint)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"User\",\n  \"email\": \"updated.user@example.com\",\n  \"phone\": \"9876543210\",\n  \"preferences\": {\n    \"currency\": \"USD\",\n    \"language\": \"en\",\n    \"notifications\": true\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "profile"]
+        },
+        "description": "Update user profile using the new PUT /api/profile endpoint (Recommended for React Native)"
+      }
+    },
+    {
+      "name": "4. Verify Profile Updated",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "profile"]
+        },
+        "description": "Verify the profile was updated correctly"
+      }
+    },
+    {
+      "name": "5. Update User By ID (Protected)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test User Updated\",\n  \"email\": \"test.updated@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/user/{{userId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "user", "{{userId}}"]
+        },
+        "description": "Update user by ID - now requires authentication and authorization"
+      }
+    },
+    {
+      "name": "6. Test Unauthorized Update (Should Fail)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Hacker Trying to Update\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/user/000000000000000000000000",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "user", "000000000000000000000000"]
+        },
+        "description": "Try to update another user's profile - should return 403 Forbidden"
+      }
+    },
+    {
+      "name": "7. Update Profile Extended (with Image)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "John Doe",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "john.doe@example.com",
+              "type": "text"
+            },
+            {
+              "key": "phNo",
+              "value": "9876543210",
+              "type": "text"
+            },
+            {
+              "key": "firstName",
+              "value": "John",
+              "type": "text"
+            },
+            {
+              "key": "lastName",
+              "value": "Doe",
+              "type": "text"
+            },
+            {
+              "key": "dob",
+              "value": "1990-01-01",
+              "type": "text"
+            },
+            {
+              "key": "gender",
+              "value": "Male",
+              "type": "text"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/userProfile/updateProfile",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "userProfile", "updateProfile"]
+        },
+        "description": "Update user profile with multipart form data (for image uploads)"
+      }
+    },
+    {
+      "name": "8. Get User Details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/user/getUser",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "user", "getUser"]
+        },
+        "description": "Get authenticated user's details from User model"
+      }
+    }
+  ]
+}

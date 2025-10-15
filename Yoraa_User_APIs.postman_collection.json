@@ -1,0 +1,942 @@
+{
+  "info": {
+    "_postman_id": "yoraa-user-apis",
+    "name": "Yoraa User APIs",
+    "description": "User APIs for Yoraa Clothing Shop - Requires user authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cartId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "addressId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "messageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "firebaseUid",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('authToken', response.data.token);",
+                  "        pm.collectionVariables.set('userId', response.data.user._id);",
+                  "        console.log('Auth token saved:', response.data.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "User Signup",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Create new user account"
+          }
+        },
+        {
+          "name": "Firebase Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"firebase-id-token-here\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/firebase-login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "firebase-login"]
+            },
+            "description": "Login using Firebase token"
+          }
+        },
+        {
+          "name": "Generate OTP",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"+919876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/generate-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "generate-otp"]
+            },
+            "description": "Generate OTP for phone verification"
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"+919876543210\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "verify-otp"]
+            },
+            "description": "Verify OTP and complete registration"
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "description": "Send password reset email"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Logout user session"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 User Profile",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "{{userId}}"]
+            },
+            "description": "Get current user profile"
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated John\",\n  \"lastName\": \"Updated Doe\",\n  \"phoneNumber\": \"+919876543211\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "{{userId}}"]
+            },
+            "description": "Update user profile information"
+          }
+        },
+        {
+          "name": "Update User Profile (Extended)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "bio",
+                  "value": "Updated bio",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/userProfile/updateProfile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "userProfile", "updateProfile"]
+            },
+            "description": "Update extended user profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛒 Shopping Cart",
+      "item": [
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"quantity\": 1,\n  \"size\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Add item to shopping cart"
+          }
+        },
+        {
+          "name": "Get User Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "user", "{{userId}}"]
+            },
+            "description": "Get user's cart items"
+          }
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/{{cartId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "{{cartId}}"]
+            },
+            "description": "Update cart item quantity"
+          }
+        },
+        {
+          "name": "Remove Item from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/{{cartId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "{{cartId}}"]
+            },
+            "description": "Remove item from cart"
+          }
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/user/{{userId}}/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "user", "{{userId}}", "clear"]
+            },
+            "description": "Clear all items from cart"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📍 Address Management",
+      "item": [
+        {
+          "name": "Add Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"home\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phone\": \"+919876543210\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"pinCode\": \"400001\",\n  \"country\": \"India\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/address",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "address"]
+            },
+            "description": "Add new address"
+          }
+        },
+        {
+          "name": "Get User Addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/address/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "address", "user", "{{userId}}"]
+            },
+            "description": "Get all user addresses"
+          }
+        },
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Updated Address\",\n  \"city\": \"Updated City\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/address/{{addressId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "address", "{{addressId}}"]
+            },
+            "description": "Update existing address"
+          }
+        },
+        {
+          "name": "Delete Address",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/address/{{addressId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "address", "{{addressId}}"]
+            },
+            "description": "Delete address"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛍️ Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"itemId\": \"{{itemId}}\",\n      \"quantity\": 1,\n      \"size\": \"M\",\n      \"price\": 999\n    }\n  ],\n  \"shippingAddress\": \"{{addressId}}\",\n  \"paymentMethod\": \"razorpay\",\n  \"totalAmount\": 999\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Create new order"
+          }
+        },
+        {
+          "name": "Get User Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "user", "{{userId}}"]
+            },
+            "description": "Get all user orders"
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Get specific order details"
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Changed mind\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}", "cancel"]
+            },
+            "description": "Cancel an order"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Payments",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 999,\n  \"currency\": \"INR\",\n  \"orderId\": \"{{orderId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/razorpay/create-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "razorpay", "create-order"]
+            },
+            "description": "Create Razorpay payment order"
+          }
+        }
+      ]
+    },
+    {
+      "name": "⭐ Reviews & Ratings",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excellent product!\",\n  \"title\": \"Great quality\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/user/{{itemId}}/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "user", "{{itemId}}", "reviews"]
+            },
+            "description": "Create review for an item"
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Updated review comment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            },
+            "description": "Update existing review"
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            },
+            "description": "Delete review"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💝 Wishlist & Save for Later",
+      "item": [
+        {
+          "name": "Add to Wishlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist"]
+            },
+            "description": "Add item to wishlist"
+          }
+        },
+        {
+          "name": "Get User Wishlist",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist", "user", "{{userId}}"]
+            },
+            "description": "Get user's wishlist"
+          }
+        },
+        {
+          "name": "Remove from Wishlist",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist", "{{itemId}}"]
+            },
+            "description": "Remove item from wishlist"
+          }
+        },
+        {
+          "name": "Save Item for Later",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"size\": \"M\",\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/save-for-later",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "save-for-later"]
+            },
+            "description": "Save item for later purchase"
+          }
+        },
+        {
+          "name": "Get Saved Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/save-for-later/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "save-for-later", "user", "{{userId}}"]
+            },
+            "description": "Get user's saved items"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎯 Points & Rewards",
+      "item": [
+        {
+          "name": "Get User Points",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/points/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "user", "{{userId}}"]
+            },
+            "description": "Get user's points balance"
+          }
+        },
+        {
+          "name": "Redeem Points",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 100,\n  \"orderId\": \"{{orderId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/points/redeem",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "points", "redeem"]
+            },
+            "description": "Redeem points for discount"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📧 User Messages",
+      "item": [
+        {
+          "name": "Get Folder Counts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inbox/user/counts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inbox", "user", "counts"]
+            },
+            "description": "Get message folder counts"
+          }
+        },
+        {
+          "name": "Get Messages by Folder",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inbox/user/inbox",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inbox", "user", "inbox"]
+            },
+            "description": "Get messages from inbox"
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Support Request\",\n  \"message\": \"I need help with my order\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inbox/user/send",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inbox", "user", "send"]
+            },
+            "description": "Send message to support"
+          }
+        },
+        {
+          "name": "Reply to Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Thank you for your response...\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inbox/user/reply/{{messageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inbox", "user", "reply", "{{messageId}}"]
+            },
+            "description": "Reply to a message"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Invite Friends",
+      "item": [
+        {
+          "name": "Send Invite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"friend@example.com\",\n  \"name\": \"Friend Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/send",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "send"]
+            },
+            "description": "Send invite to a friend"
+          }
+        },
+        {
+          "name": "Get User Invites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "user", "{{userId}}"]
+            },
+            "description": "Get user's sent invites"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Ensure auth token is set for authenticated requests",
+          "const authToken = pm.collectionVariables.get('authToken');",
+          "if (authToken && pm.request.auth.type !== 'noauth') {",
+          "    pm.request.headers.upsert({",
+          "        key: 'Authorization',",
+          "        value: 'Bearer ' + authToken",
+          "    });",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-save IDs for subsequent requests",
+          "if (pm.response.code === 200 || pm.response.code === 201) {",
+          "    try {",
+          "        const jsonData = pm.response.json();",
+          "        ",
+          "        if (jsonData.data && jsonData.data._id) {",
+          "            const url = pm.request.url.toString();",
+          "            if (url.includes('/cart')) {",
+          "                pm.collectionVariables.set('cartId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/orders')) {",
+          "                pm.collectionVariables.set('orderId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/address')) {",
+          "                pm.collectionVariables.set('addressId', jsonData.data._id);",
+          "            }",
+          "            if (url.includes('/reviews')) {",
+          "                pm.collectionVariables.set('reviewId', jsonData.data._id);",
+          "            }",
+          "        }",
+          "    } catch (e) {",
+          "        // Ignore JSON parsing errors",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}

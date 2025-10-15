@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Admin Auth Token</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 50px auto; 
+            padding: 20px; 
+            background-color: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .button { 
+            background: #007cba; 
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin: 10px 0; 
+            display: block; 
+            width: 100%; 
+        }
+        .button:hover { background: #005a8b; }
+        .success { color: green; font-weight: bold; margin: 10px 0; }
+        .info { background: #e7f3ff; padding: 15px; border-left: 4px solid #007cba; margin: 10px 0; }
+        code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Admin Authentication Setup</h1>
+        <p>Click the button below to set admin authentication token and user data in localStorage:</p>
+        
+        <button class="button" onclick="setAdminAuth()">Set Admin Token & User Data</button>
+        <button class="button" onclick="clearAuth()" style="background: #dc3545;">Clear All Auth Data</button>
+        <button class="button" onclick="checkAuth()" style="background: #28a745;">Check Current Auth Status</button>
+        
+        <div id="status"></div>
+        
+        <div class="info">
+            <h3>📋 Manual Setup (if needed):</h3>
+            <p>Open browser developer console (F12) and run:</p>
+            <code>
+                localStorage.setItem('authToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGNkNzFmM2YzMWViNWQ3MmE2YzhlMjUiLCJuYW1lIjoiSm9oeWVlaW50ZWVldHkgcnRvZSIsInBoTm8iOiI3MDM2NTY3ODkwIiwiaXNWZXJpZmllZCI6dHJ1ZSwiaXNQaG9uZVZlcmlmaWVkIjp0cnVlLCJpc0VtYWlsVmVyaWZpZWQiOnRydWUsImlzQWRtaW4iOnRydWUsImlzUHJvZmlsZSI6dHJ1ZSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwicGxhdGZvcm0iOm51bGwsImlhdCI6MTc1ODYwMzc0OCwiZXhwIjoxNzU5MjA4NTQ4fQ.n-hAP8MiYd6V1piSXTnIrgU0ggZl1S7oIDKYEqgGvCs');
+            </code>
+        </div>
+
+        <div class="info">
+            <h3>🎯 Next Steps:</h3>
+            <ol>
+                <li>Set the admin token using the button above</li>
+                <li>Navigate to the arrangement control page: <code>/item-arrangement-control</code></li>
+                <li>The API should now work with proper authentication</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGNkNzFmM2YzMWViNWQ3MmE2YzhlMjUiLCJuYW1lIjoiSm9oeWVlaW50ZWVldHkgcnRvZSIsInBoTm8iOiI3MDM2NTY3ODkwIiwiaXNWZXJpZmllZCI6dHJ1ZSwiaXNQaG9uZVZlcmlmaWVkIjp0cnVlLCJpc0VtYWlsVmVyaWZpZWQiOnRydWUsImlzQWRtaW4iOnRydWUsImlzUHJvZmlsZSI6dHJ1ZSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwicGxhdGZvcm0iOm51bGwsImlhdCI6MTc1ODYwMzc0OCwiZXhwIjoxNzU5MjA4NTQ4fQ.n-hAP8MiYd6V1piSXTnIrgU0ggZl1S7oIDKYEqgGvCs';
+
+        const adminUserData = {
+            "_id": "68cd71f3f31eb5d72a6c8e25",
+            "name": "Johyeeinteeety rtoe",
+            "phNo": "7036567890",
+            "isVerified": true,
+            "isPhoneVerified": true,
+            "isEmailVerified": true,
+            "isAdmin": true,
+            "isProfile": true,
+            "email": "user@example.com",
+            "platform": null
+        };
+
+        function setAdminAuth() {
+            try {
+                localStorage.setItem('authToken', adminToken);
+                localStorage.setItem('userData', JSON.stringify(adminUserData));
+                
+                // Also set Redux persist data for auth slice
+                const authData = {
+                    user: adminUserData,
+                    token: adminToken,
+                    isAuthenticated: true,
+                    isLoading: false,
+                    error: null
+                };
+                
+                localStorage.setItem('persist:yoraa-auth', JSON.stringify({
+                    user: JSON.stringify(adminUserData),
+                    token: JSON.stringify(adminToken),
+                    isAuthenticated: JSON.stringify(true)
+                }));
+                
+                showStatus('✅ Admin token and user data set successfully!<br>You can now access protected routes.', 'success');
+            } catch (error) {
+                showStatus('❌ Error setting auth data: ' + error.message, 'error');
+            }
+        }
+
+        function clearAuth() {
+            try {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('persist:yoraa-auth');
+                localStorage.removeItem('persist:root');
+                
+                showStatus('🗑️ All auth data cleared successfully!', 'success');
+            } catch (error) {
+                showStatus('❌ Error clearing auth data: ' + error.message, 'error');
+            }
+        }
+
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData');
+            const persistAuth = localStorage.getItem('persist:yoraa-auth');
+            
+            let status = '<h4>🔍 Current Auth Status:</h4>';
+            status += '<p><strong>Token:</strong> ' + (token ? '✅ Present (' + token.substring(0, 50) + '...)' : '❌ Missing') + '</p>';
+            status += '<p><strong>User Data:</strong> ' + (userData ? '✅ Present' : '❌ Missing') + '</p>';
+            status += '<p><strong>Persist Data:</strong> ' + (persistAuth ? '✅ Present' : '❌ Missing') + '</p>';
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    status += '<p><strong>User Name:</strong> ' + user.name + '</p>';
+                    status += '<p><strong>Admin Status:</strong> ' + (user.isAdmin ? '✅ Admin' : '❌ Not Admin') + '</p>';
+                } catch (e) {
+                    status += '<p><strong>User Data:</strong> ⚠️ Invalid JSON</p>';
+                }
+            }
+            
+            showStatus(status, 'info');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            const className = type === 'error' ? 'error' : (type === 'info' ? 'info' : 'success');
+            statusDiv.innerHTML = '<div class="' + className + '">' + message + '</div>';
+        }
+
+        // Auto-check status on load
+        window.onload = function() {
+            checkAuth();
+        };
+    </script>
+</body>
+</html>

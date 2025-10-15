@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Production service
+  yoraa-backend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: yoraa-api-prod
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - HOST=0.0.0.0
+    env_file:
+      - .env.production
+    volumes:
+      - yoraa-logs:/var/log/pm2
+    networks:
+      - yoraa-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development service
+  yoraa-backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: yoraa-api-dev
+    restart: unless-stopped
+    ports:
+      - "8001:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - HOST=0.0.0.0
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app                          # Mount source code for hot reload
+      - /app/node_modules               # Prevent node_modules from being overwritten
+      - yoraa-logs-dev:/var/log/pm2
+    networks:
+      - yoraa-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  yoraa-network:
+    driver: bridge
+
+volumes:
+  yoraa-logs:
+    driver: local
+  yoraa-logs-dev:
+    driver: local

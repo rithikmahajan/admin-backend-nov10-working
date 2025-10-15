@@ -1,0 +1,38 @@
+Subject: Enable API Access & IP Whitelisting - Company ID 5783639
+
+Dear Shiprocket Support Team,
+
+I am experiencing 403 "Unauthorized! You do not have the required permissions[IP]" 
+errors when attempting to create orders via the Shiprocket API.
+
+Account Details:
+- Email: contact@yoraa.in
+- Company ID: 5783639
+- Company Name: YORAA APPARELS PRIVATE LIMITED
+- User ID: 5996773
+
+Current Issue:
+- Endpoint: POST /v1/external/orders/create/adhoc
+- Error: "Unauthorized! You do not have the required permissions[IP]"
+- Authentication: Working (token generation successful)
+- Order Creation: Failing with 403 error
+
+Request:
+1. Enable full API access for order creation and management
+2. Whitelist the following IP address for API access:
+   - Development/Production IP: 122.161.240.166
+3. Remove any IP-based restrictions on my account
+4. Confirm if there are any additional account verification steps needed
+
+Technical Details:
+- Using main account credentials for API authentication
+- Following Shiprocket API documentation
+- Backend properly implemented with token management
+- Issue is specifically related to IP restrictions
+
+Please enable unrestricted API access or whitelist the IP address mentioned above.
+
+Best regards,
+Rithik Mahajan
+contact@yoraa.in
+Phone: 7006114695

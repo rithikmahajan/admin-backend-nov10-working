@@ -1,0 +1,49 @@
+Subject: Urgent: API IP Whitelist Needed - Company ID 5783639
+
+Dear Shiprocket Support Team,
+
+I am unable to access Shiprocket API endpoints from my application. All API calls return:
+"Unauthorized! You do not have the required permissions[IP]."
+
+ACCOUNT DETAILS:
+- Email: contact@yoraa.in
+- Company ID: 5783639
+- Company Name: YORAA APPARELS PRIVATE LIMITED
+- Phone: 7006114695
+
+IP ADDRESS TO WHITELIST:
+- 122.161.240.166
+
+PROBLEM:
+Every API endpoint call (authentication works fine) returns 403 error with message: "Unauthorized! You do not have the required permissions[IP]."
+
+Specifically failing on:
+- /orders/create/adhoc (order creation)
+- /courier/courierListWithCounts
+- /orders (order list)
+
+WHAT I'VE TRIED:
+1. Verified credentials are correct (authentication succeeds)
+2. Added IP in "API Users" section - but this didn't resolve the issue
+3. Unable to locate the main "API Integration IP Whitelist" section in dashboard
+
+REQUEST:
+Please whitelist IP address 122.161.240.166 for full API access, especially:
+- Order creation API
+- Courier API  
+- Order management API
+
+OR
+
+Please guide me to the exact location in dashboard where I can add IP whitelist for API integration (not the "API Users" section).
+
+URGENCY:
+This is blocking our production e-commerce system. Orders are being placed by customers but cannot be automatically sent to Shiprocket for shipping.
+
+Please assist as soon as possible.
+
+Best regards,
+Rithik Mahajan
+Email: contact@yoraa.in
+Phone: 7006114695
+Company ID: 5783639

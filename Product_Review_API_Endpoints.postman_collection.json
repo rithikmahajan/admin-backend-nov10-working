@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "review-api-endpoints",
+		"name": "Product Review API Endpoints",
+		"description": "Complete collection for testing all product review API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "review-system"
+	},
+	"item": [
+		{
+			"name": "📝 Product Reviews",
+			"item": [
+				{
+					"name": "Get Product Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}/reviews?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}", "reviews"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination (default: 1)"
+								},
+								{
+									"key": "limit", 
+									"value": "10",
+									"description": "Number of reviews per page (default: 20)"
+								},
+								{
+									"key": "rating",
+									"value": "",
+									"disabled": true,
+									"description": "Filter by rating (1-5)"
+								}
+							]
+						},
+						"description": "Get paginated reviews for a specific product with optional rating filter"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Rating Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}/rating-stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}", "rating-stats"]
+						},
+						"description": "Get rating statistics including average rating, total reviews, and rating distribution"
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Product Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"description": "Required: JWT authentication token"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excellent product quality! Really satisfied with this purchase.\",\n  \"title\": \"Love it!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}/reviews",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}", "reviews"]
+						},
+						"description": "Submit a new review for a product (requires authentication)"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Review as Helpful",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"description": "Required: JWT authentication token"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reviews/{{reviewId}}/helpful",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reviews", "{{reviewId}}", "helpful"]
+						},
+						"description": "Mark a specific review as helpful (requires authentication)"
+					},
+					"response": []
+				}
+			],
+			"description": "Product review management endpoints"
+		},
+		{
+			"name": "🧪 Test Scenarios",
+			"item": [
+				{
+					"name": "Get Reviews with Rating Filter (5 stars)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}/reviews?rating=5&limit=5",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}", "reviews"],
+							"query": [
+								{
+									"key": "rating",
+									"value": "5"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Test filtering reviews by 5-star rating"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews - Page 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}/reviews?page=2&limit=5",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}", "reviews"],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Test pagination - get second page of reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Error Test - Invalid Product ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/invalid-product-id/reviews",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "invalid-product-id", "reviews"]
+						},
+						"description": "Test error handling for invalid product ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Test cases for various scenarios and edge cases"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8001",
+			"description": "Base URL for the API server"
+		},
+		{
+			"key": "productId",
+			"value": "68da56fc0561b958f6694e39",
+			"description": "Test product ID provided by frontend team"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"description": "JWT authentication token (set this after login)"
+		},
+		{
+			"key": "reviewId",
+			"value": "",
+			"description": "Review ID for testing helpful endpoint (get from create review response)"
+		}
+	]
+}

@@ -1,0 +1,452 @@
+{
+  "info": {
+    "_postman_id": "yoraa-public-apis",
+    "name": "Yoraa Public APIs",
+    "description": "Public APIs for Yoraa Clothing Shop - No authentication required",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "subCategoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "couponCode",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inviteCode",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health & Status",
+      "item": [
+        {
+          "name": "Server Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"]
+            },
+            "description": "Check if the server is running"
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Health check endpoint"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Items Catalog",
+      "item": [
+        {
+          "name": "Get All Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items?page=1&limit=20&sortBy=createdAt&sortOrder=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort order"
+                }
+              ]
+            },
+            "description": "Get all items with pagination"
+          }
+        },
+        {
+          "name": "Get Item by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}"]
+            },
+            "description": "Get specific item details"
+          }
+        },
+        {
+          "name": "Get Items by Filter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"page\": 1,\n    \"limit\": 10,\n    \"filters\": {\n        \"categoryId\": [\"{{categoryId}}\"],\n        \"subCategoryId\": [\"{{subCategoryId}}\"],\n        \"brand\": [\"Nike\", \"Adidas\"],\n        \"minPrice\": 1000,\n        \"maxPrice\": 5000\n    },\n    \"searchText\": \"t-shirt\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/filter",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "filter"]
+            },
+            "description": "Filter items by various criteria"
+          }
+        },
+        {
+          "name": "Get Items by SubCategory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/subcategory/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "subcategory", "{{subCategoryId}}"]
+            },
+            "description": "Get items by subcategory"
+          }
+        },
+        {
+          "name": "Search Items by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/search/name?query=shirt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "search", "name"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "shirt",
+                  "description": "Search term"
+                }
+              ]
+            },
+            "description": "Search items by name"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📂 Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            },
+            "description": "Get all categories"
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Get specific category"
+          }
+        },
+        {
+          "name": "Get All SubCategories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories"]
+            },
+            "description": "Get all subcategories"
+          }
+        },
+        {
+          "name": "Get SubCategories by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/subcategories/category/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subcategories", "category", "{{categoryId}}"]
+            },
+            "description": "Get subcategories for specific category"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔍 Filters & Search",
+      "item": [
+        {
+          "name": "Get Available Sizes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/filters/sizes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "filters", "sizes"]
+            },
+            "description": "Get all available sizes"
+          }
+        },
+        {
+          "name": "Get Available Colors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/filters/colors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "filters", "colors"]
+            },
+            "description": "Get all available colors"
+          }
+        },
+        {
+          "name": "Get Available Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/filters/brands",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "filters", "brands"]
+            },
+            "description": "Get all available brands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Pricing & Promotions",
+      "item": [
+        {
+          "name": "Validate Promo Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{couponCode}}\",\n  \"orderAmount\": 1000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/promoCode/promo-codes/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "promoCode", "promo-codes", "validate"]
+            },
+            "description": "Validate promo code for order"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎨 Content & Media",
+      "item": [
+        {
+          "name": "Get All Banners",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/banners",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "banners"]
+            },
+            "description": "Get all active banners"
+          }
+        },
+        {
+          "name": "Get Active Join Us Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/joinus/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "joinus", "active"]
+            },
+            "description": "Get active join us posts"
+          }
+        },
+        {
+          "name": "Get Posts by Section",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/joinus/section/careers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "joinus", "section", "careers"]
+            },
+            "description": "Get posts by section"
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚙️ App Settings",
+      "item": [
+        {
+          "name": "Get App Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "settings"]
+            },
+            "description": "Get application settings"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Invite System",
+      "item": [
+        {
+          "name": "Validate Invite Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invite-friend/validate/{{inviteCode}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "invite-friend", "validate", "{{inviteCode}}"]
+            },
+            "description": "Validate invite code"
+          }
+        }
+      ]
+    },
+    {
+      "name": "⭐ Reviews (Public)",
+      "item": [
+        {
+          "name": "Get Item Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{itemId}}/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{itemId}}", "reviews"]
+            },
+            "description": "Get reviews for an item"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// No authentication required for public APIs",
+          "console.log('Public API - No authentication required');"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-save IDs for subsequent requests",
+          "if (pm.response.code === 200 || pm.response.code === 201) {",
+          "    try {",
+          "        const jsonData = pm.response.json();",
+          "        ",
+          "        if (jsonData.data && jsonData.data._id) {",
+          "            if (pm.request.url.toString().includes('/items')) {",
+          "                pm.collectionVariables.set('itemId', jsonData.data._id);",
+          "            }",
+          "            if (pm.request.url.toString().includes('/categories')) {",
+          "                pm.collectionVariables.set('categoryId', jsonData.data._id);",
+          "            }",
+          "            if (pm.request.url.toString().includes('/subcategories')) {",
+          "                pm.collectionVariables.set('subCategoryId', jsonData.data._id);",
+          "            }",
+          "        }",
+          "    } catch (e) {",
+          "        // Ignore JSON parsing errors",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}

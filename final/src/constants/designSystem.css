@@ -1,0 +1,491 @@
+/**
+ * Design System CSS Variables
+ * Auto-generated from Figma design variables
+ */
+
+:root {
+  /* Colors from Figma */
+  --color-white: #FFFFFF;
+  --color-primary-white: #FFFFFF;
+  --color-primary-black: #000000;
+  --color-dark-gray: #232321;
+  --color-gray: #E7E7E3;
+  --color-blue: #003F62;
+  --color-brand-blue: #000AFF;
+  --color-light-gray: #BCBCBC;
+  --color-medium-gray: #BFBFBF;
+  --color-text-black: #111111;
+  --color-border-gray: #E4E4E4;
+  
+  /* Typography */
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-open-sans: 'Open Sans', sans-serif;
+  
+  /* Font Weights */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Font Sizes */
+  --font-size-xs: 10px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 21px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 36px;
+  --font-size-4xl: 48px;
+  
+  /* Line Heights */
+  --line-height-tight: 16.9px;
+  --line-height-normal: 20px;
+  --line-height-relaxed: 24px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  
+  /* Border Radius */
+  --border-radius-sm: 3px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 100px;
+  
+  /* Border Width */
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-default: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* Responsive Breakpoints */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-tablet-lg: 1024px;
+}
+
+/* Design System Utility Classes */
+
+/* Button Styles */
+.btn-primary {
+  background-color: var(--color-brand-blue);
+  color: var(--color-white);
+  border: var(--border-width-medium) solid var(--color-brand-blue);
+  border-radius: var(--border-radius-lg);
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-blue);
+  border-color: var(--color-blue);
+}
+
+.btn-secondary {
+  background-color: var(--color-white);
+  color: var(--color-text-black);
+  border: var(--border-width-medium) solid var(--color-border-gray);
+  border-radius: var(--border-radius-lg);
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-light-gray);
+}
+
+.btn-toggle {
+  background-color: var(--color-white);
+  color: var(--color-text-black);
+  border: var(--border-width-medium) solid var(--color-border-gray);
+  border-radius: var(--border-radius-full);
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-toggle.active {
+  background-color: var(--color-brand-blue);
+  color: var(--color-white);
+  border-color: var(--color-primary-black);
+}
+
+/* Input Styles */
+.input-default {
+  width: 100%;
+  height: 47px;
+  padding: 0 var(--spacing-lg);
+  border: var(--border-width-medium) solid var(--color-primary-black);
+  border-radius: var(--border-radius-xl);
+  font-size: var(--font-size-base);
+  font-family: var(--font-montserrat);
+  background-color: var(--color-white);
+  outline: none;
+}
+
+.input-default:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.textarea-default {
+  width: 100%;
+  height: 154px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: var(--border-width-medium) solid var(--color-primary-black);
+  border-radius: var(--border-radius-xl);
+  font-size: var(--font-size-base);
+  font-family: var(--font-montserrat);
+  background-color: var(--color-white);
+  resize: none;
+  outline: none;
+}
+
+.textarea-default:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Label Styles */
+.label-default {
+  display: block;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-black);
+  font-family: var(--font-montserrat);
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Heading Styles */
+.heading-h1 {
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-black);
+  font-size: var(--font-size-4xl);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.heading-h2 {
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-black);
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-xl);
+}
+
+.heading-h3 {
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-black);
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-xl);
+}
+
+.heading-h4 {
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-black);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Text Styles */
+.text-body {
+  font-size: var(--font-size-base);
+  color: var(--color-text-black);
+  font-family: var(--font-montserrat);
+}
+
+.text-small {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-black);
+  font-family: var(--font-montserrat);
+}
+
+.text-caption {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-black);
+  font-family: var(--font-montserrat);
+  text-align: center;
+}
+
+/* Progress Bar with Figma Colors */
+.progress-bar {
+  width: 289px;
+  height: 4px;
+  background-color: var(--color-gray);
+  border-radius: var(--border-radius-lg);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-blue);
+  border-radius: var(--border-radius-lg);
+  transition: width 0.3s ease;
+}
+
+/* File Upload Area */
+.upload-area {
+  border: 1px dashed var(--color-light-gray);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-white);
+  transition: border-color 0.2s ease;
+}
+
+.upload-area:hover {
+  border-color: var(--color-blue);
+}
+
+/* Card Styles */
+.card-default {
+  background-color: var(--color-white);
+  border: var(--border-width-thin) solid var(--color-gray);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-lg);
+}
+
+/* Responsive Utilities */
+
+/* Container Classes */
+.container-responsive {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-responsive {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding: 0 4rem;
+  }
+}
+
+/* Responsive Grid Classes */
+.grid-responsive {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-responsive-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-sm-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .grid-responsive-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-responsive-md-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-responsive-md-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-lg-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-responsive-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-responsive-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .grid-responsive-lg-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Responsive Flexbox Classes */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .flex-responsive-md-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1024px) {
+  .flex-responsive-lg-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Responsive Typography */
+@media (max-width: 767px) {
+  .text-responsive-sm {
+    font-size: var(--font-size-sm);
+  }
+  
+  .heading-responsive-h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .heading-responsive-h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .heading-responsive-h3 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Responsive Spacing */
+@media (max-width: 767px) {
+  .p-responsive {
+    padding: var(--spacing-md);
+  }
+  
+  .px-responsive {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+  
+  .py-responsive {
+    padding-top: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+  }
+  
+  .m-responsive {
+    margin: var(--spacing-md);
+  }
+  
+  .mb-responsive {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+@media (min-width: 768px) {
+  .p-responsive {
+    padding: var(--spacing-lg);
+  }
+  
+  .px-responsive {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+  
+  .py-responsive {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+  }
+  
+  .m-responsive {
+    margin: var(--spacing-lg);
+  }
+  
+  .mb-responsive {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* Hide/Show Classes for Different Screen Sizes */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+  
+  .hide-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-tablet {
+    display: block;
+  }
+  
+  .hide-desktop {
+    display: none;
+  }
+}
+
+.show-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .show-tablet {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .show-tablet {
+    display: none;
+  }
+}

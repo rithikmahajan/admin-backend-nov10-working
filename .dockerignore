@@ -1,0 +1,117 @@
+# Docker ignore file - excludes these from Docker build context
+# This ensures only backend files are included in the Docker image
+
+# Admin panel frontend (exclude from backend Docker image)
+final/
+
+# Development dependencies and files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Environment files (should be injected at runtime via docker-compose)
+.env
+.env.*
+!.env.example
+
+# Git and version control
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.vim*
+*.sublime-*
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+/var/log/
+
+# Coverage and test files
+coverage/
+.nyc_output
+.coverage
+.cache
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Documentation and non-essential files
+README*.md
+*.md
+!IMPLEMENTATION_SUMMARY.md
+docs/
+documentation/
+
+# Deployment and CI/CD files
+deploy-*.sh
+.deployignore
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Postman collections (optional)
+*.postman_collection.json
+
+# SSH keys and secrets
+*.pub
+*_ssh_key*
+*.pem
+*.key
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+temp/
+
+# Docker files (don't need these in the image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Database backups
+database_backup/
+*.sql
+*.dump
+
+# JSON files - be specific to avoid blocking necessary files
+# Block all JSON first, then allow the ones we need
+*.json
+!package.json
+!package-lock.json
+!serviceAccountKey.json
+!firebase-service-account.json
+!firebase.json
+!firestore.*.json
+!firebase.json
+!firestore.json
+
+# Build artifacts (if any)
+dist/
+build/
+.next/
+out/
+
+# Misc
+.sass-cache/
+.parcel-cache/
