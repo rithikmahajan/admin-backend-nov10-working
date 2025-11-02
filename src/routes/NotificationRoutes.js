@@ -11,7 +11,21 @@ const router = express.Router(); // Initialize an Express router instance
 
 // Configure multer for in-memory storage (files are stored in memory, not on disk)
 const storage = multer.memoryStorage();
-const upload = multer({ storage }); // Multer instance for handling single file uploads
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB max file size
+    files: 1 // Only allow 1 file per request
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept only image files
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+}); // Multer instance for handling single file uploads
 
 // POST /api/notifications/upload-notification-image
 // Uploads an image for a notification to AWS S3 (authenticated users only)

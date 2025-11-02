@@ -8,6 +8,7 @@ const Category = require("../models/Category"); // Mongoose model for Category c
 const { ApiResponse } = require("../utils/ApiResponse"); // Utility to standardize API responses
 const { verifyToken } = require("../middleware/VerifyToken"); // Middleware to verify JWT tokens
 const checkAdminRole = require("../middleware/CheckAdminRole"); // Middleware to restrict access to admins
+const { cache, clearCache } = require("../middleware/cache"); // Redis caching middleware
 
 // Initialize an Express router instance
 const CategoryRouter = express.Router();
@@ -17,7 +18,21 @@ const newItemController = require("../controllers/itemController/NewItemControll
 
 // Configure multer for in-memory storage (files are stored in memory, not on disk)
 const storage = multer.memoryStorage();
-const upload = multer({ storage }); // Multer instance for handling file uploads
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB max file size
+    files: 1 // Only allow 1 file per request
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept only image files
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+}); // Multer instance for handling file uploads
 
 // GET /api/categories/sale
 // Gets categories that have sale products (PUBLIC - NO AUTH REQUIRED)
@@ -62,7 +77,19 @@ CategoryRouter.post(
 
       // Upload the image to AWS S3 and get the file URL
       console.log("ROUTE - Uploading image to S3...");
+      console.log('\n💥💥💥 BEFORE uploadMultipart call');
+      console.log('💥 req.file:', req.file ? {name: req.file.originalname, size: req.file.size} : null);
+      console.log('💥 folder: categories');
+      console.log('💥 newCategoryId:', newCategoryId);
+      console.log('\n💥💥💥 BEFORE uploadMultipart call');
+      console.log('💥 req.file:', req.file ? {name: req.file.originalname, size: req.file.size} : null);
+      console.log('💥 folder: categories');
+      console.log('💥 newCategoryId:', newCategoryId);
       const fileUrl = await uploadMultipart(req.file, "categories", newCategoryId);
+      console.log('\n💥💥💥 AFTER uploadMultipart call');
+      console.log('💥 Returned fileUrl:', fileUrl, '\n');
+      console.log('\n💥💥💥 AFTER uploadMultipart call');
+      console.log('💥 Returned fileUrl:', fileUrl, '\n');
       console.log("ROUTE - File uploaded to:", fileUrl);
 
       // Attach the image URL to the request body for use in the controller
@@ -70,6 +97,14 @@ CategoryRouter.post(
 
       // Call the controller to create the category
       await categoryController.createCategory(req, res, newCategoryId);
+      
+      // Clear category cache after creation (optional - don't fail if cache unavailable)
+      try {
+        await clearCache('cache:*/categories*');
+        console.log("✅ Category cache cleared after creation");
+      } catch (cacheError) {
+        console.log("⚠️  Cache clearing skipped (Redis may not be available):", cacheError.message);
+      }
       
       // The controller already sends the response, so no need to send another one
     } catch (error) {
@@ -91,7 +126,7 @@ CategoryRouter.get(
 );
 
 // GET /api/categories/
-// Retrieves all categories (public access)
+// Retrieves all categories (public access) - No cache for now to prevent stale data
 CategoryRouter.get("/", categoryController.getAllCategories);
 
 // GET /api/categories/:id
@@ -133,13 +168,25 @@ CategoryRouter.put(
 
       // Call the controller to update the category
       await categoryController.updateCategory(req, res);
+      
+      // Clear the categories cache after successful update (optional - don't fail if cache unavailable)
+      try {
+        console.log("🗑️  Clearing category cache after update...");
+        await clearCache('cache:*categories*');
+        console.log("✅ Category cache cleared successfully after update");
+      } catch (cacheError) {
+        console.log("⚠️  Cache clearing skipped (Redis may not be available):", cacheError.message);
+      }
     } catch (error) {
       // Send error response if update fails
-      res
-        .status(500)
-        .json(
-          ApiResponse(null, "Category update failed", false, 500, error.message)
-        );
+      console.error("❌ Category update error:", error);
+      if (!res.headersSent) {
+        res
+          .status(500)
+          .json(
+            ApiResponse(null, "Category update failed", false, 500, error.message)
+          );
+      }
     }
   }
 );
